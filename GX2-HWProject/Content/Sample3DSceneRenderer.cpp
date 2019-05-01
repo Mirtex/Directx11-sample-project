@@ -1,12 +1,10 @@
 ﻿#include "pch.h"
 #include "Sample3DSceneRenderer.h"
-
 #include "..\Common\DirectXHelper.h"
 #include "..\Common\DDSTextureLoader.h"
 #include "MeshLoader.h"
 
 using namespace GX2_HWProject;
-
 using namespace DirectX;
 using namespace Windows::Foundation;
 
@@ -72,14 +70,7 @@ void Sample3DSceneRenderer::RenderStuff()
 		m_constantBufferData.lightDirection[i] = lightDirections[i];
 
 	}
-	//m_constantBufferData.lightColor[1] = lightColors[1];
-	//m_constantBufferData.lightColor[2] = lightColors[2];
-	//m_constantBufferData.lightColor[3] = lightColors[3];
-	//m_constantBufferData.lightColor[4] = lightColors[4];
-	//m_constantBufferData.lightDirection[1] = lightDirections[1];
-	//m_constantBufferData.lightDirection[2] = lightDirections[2];
-	//m_constantBufferData.lightDirection[3] = lightDirections[3];
-	//m_constantBufferData.lightDirection[4] = lightDirections[4];
+	
 
 	m_constantBufferData.modelID = ID_CCUBE;
 
@@ -94,11 +85,7 @@ void Sample3DSceneRenderer::RenderStuff()
 	//skybox
 	m_constantBufferDataSky = m_constantBufferData;
 	XMStoreFloat4x4(&m_constantBufferDataSky.model[0], XMMatrixTranspose(XMMatrixScaling(100.0f, 100.0f, 100.0f) * XMMatrixTranslationFromVector(XMLoadFloat4(&loc))));
-	//m_constantBufferDataSky.model = cameraLoc;
-	//m_constantBufferDataSky.view._41 = camera._41;
-	//m_constantBufferDataSky.view._42 = camera._42;
-	//m_constantBufferDataSky.view._43 = camera._43;
-	//m_constantBufferDataSky.view = camera;
+
 
 	// Prepare the constant buffer to send it to the graphics device.
 	context->UpdateSubresource1( m_constantBuffer.Get(), 0,	NULL, &m_constantBufferData, 0,	0, 0);
@@ -164,10 +151,6 @@ void Sample3DSceneRenderer::RenderStuff()
 
 	//Draw Loaded Mesh
 
-	//XMMATRIX lightMatrix = XMMatrixTranslationFromVector(5.0f * XMLoadFloat4(&lightDirections[0]));
-	//XMMATRIX lightScale = XMMatrixScaling(2.5f, 2.5f, 2.5f);
-	//lightMatrix = lightScale * lightMatrix;
-	//XMStoreFloat4x4(&m_constantBufferData.model, XMMatrixTranspose(lightMatrix));
 	XMMATRIX holdMatrix = XMMatrixRotationX(-1.5708);
 	holdMatrix = XMMatrixTranslation(0, 0, 1.5f) *holdMatrix;
 	XMMATRIX holdScale = XMMatrixScaling(2.5f, 2.5f, 2.5f);
@@ -284,15 +267,7 @@ void Sample3DSceneRenderer::RenderStuff()
 	p2.x = abs(p2.x);
 	p3.x = abs(p3.x);
 
-	//if (p1.x < p2.x && p1.x > p3.x)
-	//{
-	//	temp = m_constantBufferData.lightDirection[4];
-	//	m_constantBufferData.lightDirection[4] = m_constantBufferData.lightDirection[2];
-	//	m_constantBufferData.lightDirection[2] = temp;
-	//}
-	
-	//if(p2.x < p1.x && p1.x > p3.x)
-	
+		
 	for (unsigned int i = 0; i < NUM_LIGHTS; ++i)
 	{
 		if (i < 2 || i >= 5)
@@ -334,9 +309,7 @@ void Sample3DSceneRenderer::RenderStuff()
 			{
 				j = i;
 			}
-				//m_constantBufferData.lightDirection[4] = XMFLOAT4(2.3f, 0.0f, 0, 1.0f);
-				//m_constantBufferData.lightDirection[3] = XMFLOAT4(3.3f, 0.0f, 0, 1.0f);
-				//m_constantBufferData.lightDirection[2] = XMFLOAT4(4.3f, 0.0f, 0, 1.0f);
+
 				XMMATRIX lightMatrix = XMMatrixTranslationFromVector(XMLoadFloat4(&lightDirections[j]));
 				XMMATRIX lightScale = XMMatrixScaling(0.5f, 0.5f, 0.5f);
 				lightMatrix = lightScale * lightMatrix;
@@ -393,10 +366,7 @@ Sample3DSceneRenderer::Sample3DSceneRenderer(const std::shared_ptr<DX::DeviceRes
 	XMStoreFloat4x4(&m_constantBufferData.view, XMMatrixTranspose(XMMatrixInverse(0, XMMatrixLookAtRH(eye, at, up))));
 
 	//skyBox
-	//XMFLOAT4X4 skyView = m_constantBufferData.view;
-	//skyView._41 = skyView._42 = skyView._43 = 0;
 	m_constantBufferDataSky.view = m_constantBufferData.view;
-	//XMStoreFloat4x4(&m_constantBufferData.model, XMMatrixTranspose(XMMatrixLookAtRH(eye, at, up)));
 
 }
 
@@ -439,17 +409,6 @@ void Sample3DSceneRenderer::CreateWindowSizeDependentResources()
 		
 	m_constantBufferDataSky.projection = m_constantBufferData.projection;
 
-	//XMStoreFloat4x4(
-	//	&m_constantBufferDataSky.projection,
-	//	XMMatrixTranspose(perspectiveMatrix * orientationMatrix)
-	//	);
-
-	// Eye is at (0,0.7,1.5), looking at point (0,-0.1,0) with the up-vector along the y-axis.
-	//static const XMVECTORF32 eye = { 0.0f, 0.7f, 2.5f, 0.0f };
-	//static const XMVECTORF32 at = { 0.0f, -0.1f, 0.0f, 0.0f };
-	//static const XMVECTORF32 up = { 0.0f, 1.0f, 0.0f, 0.0f };
-	//
-	//XMStoreFloat4x4(&m_constantBufferData.view, XMMatrixTranspose(XMMatrixLookAtRH(eye, at, up)));
 }
 
 using namespace Windows::UI::Core;
@@ -490,7 +449,6 @@ void Sample3DSceneRenderer::Update(DX::StepTimer const& timer)
 		if(secondsPassed >= 4.0f && !flipped || secondsPassed <= 0 && flipped)
 		{
 			flipped = !flipped;
-			//secondsPassed = 0;
 		}
 
 		Rotate(radians);
@@ -522,9 +480,6 @@ void Sample3DSceneRenderer::Update(DX::StepTimer const& timer)
 
 	Windows::UI::Input::PointerPoint^ point = nullptr;
 
-	//if(mouse_move)/*This crashes unless a mouse event actually happened*/
-	//point = Windows::UI::Input::PointerPoint::GetCurrentPoint(pointerID);
-
 	if (mouse_move)
 	{
 		// Updates the application state once per frame.
@@ -538,16 +493,9 @@ void Sample3DSceneRenderer::Update(DX::StepTimer const& timer)
 	}
 
 	XMStoreFloat4x4(&camera, newcamera);
-	//XMStoreFloat4x4(&cameraLoc, newcamera));
 
 	/*Be sure to inverse the camera & Transpose because they don't use pragma pack row major in shaders*/
 	XMStoreFloat4x4(&m_constantBufferData.view, XMMatrixTranspose(XMMatrixInverse(0, newcamera)));
-	//XMFLOAT4X4 skyView = camera;
-	//skyView._41 = 0;
-	//skyView._42 = 0;
-	//skyView._43 = 0;
-	//XMStoreFloat4x4(&m_constantBufferDataSky.model, XMMatrixTranspose(newcamera));
-	//m_constantBufferDataSky.model = camera;
 
 
 	mouse_move = false;/*Reset*/
@@ -559,13 +507,6 @@ void Sample3DSceneRenderer::Rotate(float radians)
 	// Prepare to pass the updated model matrix to the shader
 	XMStoreFloat4x4(&m_constantBufferData.model[0], XMMatrixTranspose(XMMatrixScaling(0.8f,0.8f,0.8f)*XMMatrixRotationY(radians)*XMMatrixRotationZ(radians)));
 	m_constantBufferDataSky.storedRadians = m_constantBufferData.storedRadians = storedRadians = radians;
-
-	//XMFLOAT4X4 skyView = m_constantBufferData.view;
-	//skyView._41 = 0;
-	//skyView._42 = 0;
-	//skyView._43 = 0;
-	//m_constantBufferDataSky.view = skyView;
-
 }
 
 void Sample3DSceneRenderer::StartTracking()
@@ -646,8 +587,6 @@ void Sample3DSceneRenderer::SetMinimapCamera()
 	);
 
 	m_constantBufferDataSky.projection = m_constantBufferData.projection;
-	//XMStoreFloat4x4(&m_constantBufferDataSky.projection, XMMatrixTranspose(XMMatrixIdentity()));
-	//XMStoreFloat4x4(&m_constantBufferData.projection, XMMatrixTranspose(XMMatrixIdentity()));
 
 
 }
@@ -859,8 +798,6 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 		);
 
 		MeshLoader CosmicHold;
-		//CosmicHold.LoadMeshFromFile("Assets/CosmicContainer.obj");
-		//CosmicHold.LoadMeshFromFile("Assets/testpyramid.obj");
 		CosmicHold.LoadMeshFromFile("Assets/CosmicHolder.obj");
 		
 		numHoldVerts = CosmicHold.fullVertex.size();

@@ -1,4 +1,7 @@
 This project was created during my learning experience at Full Sail.
+
+WARNING: This project is in the process of being cleaned up and organized, it's initial state 
+is messy due to time constraints during its creation.
  
 The non-graphics code for this project was provided by the university as a
 base to work on. I have no experience with UWP implementations (at this point in time 4/28/2019).
