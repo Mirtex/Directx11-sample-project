@@ -53,11 +53,6 @@ bool MeshLoader::LoadMeshFromFile(char *path)
 			{
 				XMFLOAT3 normal;
 				fscanf_s(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
-				//float temp;
-				//temp = normal.y;
-				//normal.y = normal.z;
-				//normal.z *= temp;  // flipping Z (might not be needed)
-				//normal.z *= -1;  // flipping Z (might not be needed)
 				tempNormals.push_back(normal);
 			}
 			else if (strcmp(lineHeader, "f") == 0)
@@ -84,15 +79,11 @@ bool MeshLoader::LoadMeshFromFile(char *path)
 		{
 			// use a map for better perfomance later
 			XMFLOAT3 vertex = tempVertices[vertexIndices[i] - 1];
-			//out_vertices.push_back(vertex);
 			XMFLOAT2 UV = tempUVs[uvIndices[i] - 1];
-			//out_uvs.push_back(UV);
 			XMFLOAT3 normals = tempNormals[normalIndices[i] - 1];
-			//out_normals.push_back(normals);
 			
 			GX2_HWProject::VertexPositionColor tempVert;
 			tempVert.pos = vertex;
-			//tempVert.color = XMFLOAT3(0.1f, 0.1f, 0.1f);
 			tempVert.color = XMFLOAT3(UV.x, UV.y, 1.0f);
 			tempVert.norm = normals;
 
@@ -121,7 +112,6 @@ bool MeshLoader::LoadMeshFromFile(char *path)
 					{
 						continue;
 					}
-					//tempVert.color		= XMFLOAT3(UV.x, UV.y, 1.0f);
 				}
 			}
 
@@ -135,14 +125,6 @@ bool MeshLoader::LoadMeshFromFile(char *path)
 				vIndices.push_back(j);
 			}
 		}
-		//for (unsigned int i = 0; i < uvIndices.size(); ++i)
-		//{
-		//
-		//}
-		//
-		//for (unsigned int i = 0; i < normalIndices.size(); ++i)
-		//{
-		//}
 	}
 
 	int test = 0;

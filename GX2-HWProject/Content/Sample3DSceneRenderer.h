@@ -9,7 +9,6 @@ using namespace DirectX;
 
 namespace GX2_HWProject
 {
-	//enum vP = {x = 0, y};
 	// This sample renderer instantiates a basic rendering pipeline.
 	class Sample3DSceneRenderer
 	{
