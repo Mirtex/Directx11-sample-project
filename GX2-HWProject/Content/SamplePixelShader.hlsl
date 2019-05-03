@@ -58,7 +58,7 @@ float4 main(PixelShaderInput input) : SV_TARGET
 		float specularIntensity = 100.0f;
 		float4 energyType = float4(1.0f, 1.0f, 1.0f, 1.0f);
 
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 8; ++i)
 		{
 			//if (i == 1)
 			//	continue111111;

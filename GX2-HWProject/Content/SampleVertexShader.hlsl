@@ -37,9 +37,9 @@ PixelShaderInput main(VertexShaderInput input)
 	PixelShaderInput output;
 	float4 pos = float4(input.pos, 1.0f);
 	
-	//if(instID == 0)
 	output.viewDir = mul(input.pos, model[input.instID]);
 	output.viewDir = normalize(cameraPos - output.viewDir);
+
 	// Transform the vertex position into projected space.
 	if (modelID == 2)
 	{

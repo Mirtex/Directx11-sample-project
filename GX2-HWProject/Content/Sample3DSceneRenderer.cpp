@@ -22,7 +22,7 @@ void Sample3DSceneRenderer::RenderStuff()
 	//Light stuff
 	XMFLOAT4 lightDirections[] =
 	{
-		XMFLOAT4(1.3f, -0.2f, 0, 1.0f),
+		XMFLOAT4(2.3f, -0.2f, 0, 1.0f),
 		XMFLOAT4(-3.560f, -.5f, 0, 1.0f),
 		XMFLOAT4(2.3f, 0.0f, 0, 1.0f),
 		XMFLOAT4(3.3f, 0.0f, 0, 1.0f),
@@ -35,7 +35,7 @@ void Sample3DSceneRenderer::RenderStuff()
 	XMFLOAT4 lightColors[] =
 	{
 		// use one of these to move around
-		XMFLOAT4(0.1f, 0.01f, 0.2f, 0.0f),
+		XMFLOAT4(0.3f, 0.05f, 0.6f, 0.0f),
 		XMFLOAT4(0.01f, 0.2f, 0.2f, 0.0f),
 		XMFLOAT4(0.05f, 0.05f, 0.05f, 0.0f),		
 		XMFLOAT4(0.05f, 0.05f, 0.05f, 0.0f),		
@@ -64,7 +64,7 @@ void Sample3DSceneRenderer::RenderStuff()
 
 
 	//set up lights
-	for (unsigned int i = 0; i < (NUM_LIGHTS+1); i++)
+	for (unsigned int i = 0; i < (NUM_LIGHTS+1); ++i)
 	{
 			m_constantBufferData.lightColor[i] =	 lightColors[i];
 		m_constantBufferData.lightDirection[i] = lightDirections[i];
@@ -153,6 +153,7 @@ void Sample3DSceneRenderer::RenderStuff()
 
 	XMMATRIX holdMatrix = XMMatrixRotationX(-1.5708);
 	holdMatrix = XMMatrixTranslation(0, 0, 1.5f) *holdMatrix;
+
 	XMMATRIX holdScale = XMMatrixScaling(2.5f, 2.5f, 2.5f);
 	holdMatrix = holdScale * holdMatrix;
 	XMStoreFloat4x4(&m_constantBufferData.model[0], XMMatrixTranspose(holdMatrix));
@@ -249,6 +250,7 @@ void Sample3DSceneRenderer::RenderStuff()
 	XMVECTOR prismL1 = XMLoadFloat4(&m_constantBufferData.lightDirection[2]);
 	XMVECTOR prismL2 = XMLoadFloat4(&m_constantBufferData.lightDirection[3]);
 	XMVECTOR prismL3 = XMLoadFloat4(&m_constantBufferData.lightDirection[4]);
+
 	camL = XMVector4Dot(camL, camL);
 	prismL1 = XMVector4Dot(prismL1, prismL1);
 	prismL2 = XMVector4Dot(prismL2, prismL2);
@@ -270,6 +272,7 @@ void Sample3DSceneRenderer::RenderStuff()
 		
 	for (unsigned int i = 0; i < NUM_LIGHTS; ++i)
 	{
+
 		if (i < 2 || i >= 5)
 		{
 			XMMATRIX lightMatrix = XMMatrixTranslationFromVector(XMLoadFloat4(&lightDirections[i]));
@@ -547,7 +550,6 @@ void Sample3DSceneRenderer::SetMinimapCamera()
 	static const XMVECTORF32 at = { 0.0f, -10.0f, 0.0f, 0.0f };
 	static const XMVECTORF32 up = { 0.0f, 1.0f, 0.0f, 0.0f };
 	XMStoreFloat4x4(&camera, XMMatrixLookAtRH(eye, at, up));
-	//XMStoreFloat4x4(&camera, XMMatrixLookAtRH(eye, at, up));
 
 	XMStoreFloat4x4(&m_constantBufferData.view, XMMatrixTranspose(XMMatrixInverse(0, XMMatrixLookAtRH(eye, at, up))));
 	XMStoreFloat4x4(&m_constantBufferDataSky.view, XMMatrixTranspose(XMMatrixInverse(0, XMMatrixLookAtRH(eye, at, up))));
@@ -617,6 +619,7 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 	MeshLoader containerMesh;
 	auto loadVSTask = DX::ReadDataAsync(L"SampleVertexShader.cso");
 	auto loadPSTask = DX::ReadDataAsync(L"SamplePixelShader.cso");
+
 	// After the vertex shader file is loaded, create the shader and input layout.
 	auto createVSTask = loadVSTask.then([this](const std::vector<byte>& fileData) {
 		DX::ThrowIfFailed(
@@ -788,6 +791,7 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 		vertexBufferDataPrism.pSysMem = prismVertices;
 		vertexBufferDataPrism.SysMemPitch = 0;
 		vertexBufferDataPrism.SysMemSlicePitch = 0;
+
 		CD3D11_BUFFER_DESC vertexBufferDescPrism(sizeof(prismVertices), D3D11_BIND_VERTEX_BUFFER);
 		DX::ThrowIfFailed(
 			m_deviceResources->GetD3DDevice()->CreateBuffer(
@@ -822,6 +826,7 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 		indexBufferData.pSysMem = &CosmicHold.vIndices[0];
 		indexBufferData.SysMemPitch = 0;
 		indexBufferData.SysMemSlicePitch = 0;
+
 		CD3D11_BUFFER_DESC indexBufferDesc(sizeof(unsigned int)*m_indexCountHold, D3D11_BIND_INDEX_BUFFER);
 		DX::ThrowIfFailed(
 			m_deviceResources->GetD3DDevice()->CreateBuffer(
@@ -858,7 +863,7 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 			20,22,23,
 			
 		};
-		//CosmicHold.LoadMeshFromFile(path);
+
 		m_indexCountCube = ARRAYSIZE(cubeIndices);
 
 		D3D11_SUBRESOURCE_DATA indexBufferDataCube = {0};

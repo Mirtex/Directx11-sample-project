@@ -739,7 +739,7 @@ static HRESULT FillInitData( _In_ size_t width,
         size_t w = width;
         size_t h = height;
         size_t d = depth;
-        for( size_t i = 0; i < mipCount; i++ )
+        for( size_t i = 0; i < mipCount; ++i )
         {
             GetSurfaceInfo( w,
                             h,
