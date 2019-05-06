@@ -108,27 +108,13 @@ void Sample3DSceneRenderer::RenderStuff()
 	context->IASetInputLayout(m_inputLayout.Get());
 
 	// Attach our vertex shader.
-	context->VSSetShader(
-		m_vertexShader.Get(),
-		nullptr,
-		0
-	);
+	context->VSSetShader(m_vertexShader.Get(), nullptr, 0);
 
 	// Send the constant buffer to the graphics device.
-	context->VSSetConstantBuffers1(
-		0,
-		1,
-		m_constantBuffer.GetAddressOf(),
-		nullptr,
-		nullptr
-	);
+	context->VSSetConstantBuffers1(0, 1, m_constantBuffer.GetAddressOf(), nullptr,	nullptr);
 
 	// Attach our pixel shader.
-	context->PSSetShader(
-		m_pixelShader.Get(),
-		nullptr,
-		0
-	);
+	context->PSSetShader(m_pixelShader.Get(), nullptr, 0);
 
 	ID3D11ShaderResourceView* resViews[] = { m_cubeResView };
 	context->PSSetShaderResources(0, 1, resViews);
@@ -151,14 +137,14 @@ void Sample3DSceneRenderer::RenderStuff()
 
 	//Draw Loaded Mesh
 
-	XMMATRIX holdMatrix = XMMatrixRotationX(-1.5708);
+	XMMATRIX holdMatrix = XMMatrixRotationX(-1.5708f);
 	holdMatrix = XMMatrixTranslation(0, 0, 1.5f) *holdMatrix;
 
 	XMMATRIX holdScale = XMMatrixScaling(2.5f, 2.5f, 2.5f);
 	holdMatrix = holdScale * holdMatrix;
 	XMStoreFloat4x4(&m_constantBufferData.model[0], XMMatrixTranspose(holdMatrix));
 
-	holdMatrix = XMMatrixRotationX(-4.7124);
+	holdMatrix = XMMatrixRotationX(-4.7124f);
 	holdMatrix = XMMatrixTranslation(0, 0, 1.5f) *holdMatrix;
 	holdScale = XMMatrixScaling(2.5f, 2.5f, 2.5f);
 	holdMatrix = holdScale * holdMatrix;
@@ -260,7 +246,6 @@ void Sample3DSceneRenderer::RenderStuff()
 	prismL3 = camL - prismL3;
 
 	XMFLOAT4 p1, p2, p3;
-	XMFLOAT4 temp;
 
 	XMStoreFloat4(&p1, prismL1);
 	XMStoreFloat4(&p2, prismL2);
@@ -272,7 +257,7 @@ void Sample3DSceneRenderer::RenderStuff()
 		
 	for (unsigned int i = 0; i < NUM_LIGHTS; ++i)
 	{
-
+		//Light calculations based on type of lights (Ordered by type)
 		if (i < 2 || i >= 5)
 		{
 			XMMATRIX lightMatrix = XMMatrixTranslationFromVector(XMLoadFloat4(&lightDirections[i]));
@@ -442,11 +427,11 @@ void Sample3DSceneRenderer::Update(DX::StepTimer const& timer)
 		
 		if (secondsPassed < 4.0f && !flipped)
 		{
-			secondsPassed += timer.GetElapsedSeconds();
+			secondsPassed += static_cast<float>(timer.GetElapsedSeconds());
 		}
 		else if (secondsPassed > 0 && flipped)
 		{
-			secondsPassed -= timer.GetElapsedSeconds();
+			secondsPassed -= static_cast<float>(timer.GetElapsedSeconds());
 		}
 
 		if(secondsPassed >= 4.0f && !flipped || secondsPassed <= 0 && flipped)
@@ -463,22 +448,22 @@ void Sample3DSceneRenderer::Update(DX::StepTimer const& timer)
 
 	if (buttons['W'])
 	{
-		newcamera.r[3] = newcamera.r[3] + newcamera.r[2] * -timer.GetElapsedSeconds() * 5.0;
+		newcamera.r[3] = newcamera.r[3] + newcamera.r[2] * static_cast<float>(-timer.GetElapsedSeconds()) * 5.0f;
 	}
 
 	if (buttons['A'])
 	{
-		newcamera.r[3] = newcamera.r[3] + newcamera.r[0] * -timer.GetElapsedSeconds() *5.0;
+		newcamera.r[3] = newcamera.r[3] + newcamera.r[0] * static_cast<float>(-timer.GetElapsedSeconds()) *5.0f;
 	}
 
 	if (s_down)
 	{
-		newcamera.r[3] = newcamera.r[3] + newcamera.r[2] * timer.GetElapsedSeconds() * 5.0;
+		newcamera.r[3] = newcamera.r[3] + newcamera.r[2] * static_cast<float>(timer.GetElapsedSeconds()) * 5.0f;
 	}
 
 	if (d_down)
 	{
-		newcamera.r[3] = newcamera.r[3] + newcamera.r[0] * timer.GetElapsedSeconds() * 5.0;
+		newcamera.r[3] = newcamera.r[3] + newcamera.r[0] * static_cast<float>(timer.GetElapsedSeconds()) * 5.0f;
 	}
 
 	Windows::UI::Input::PointerPoint^ point = nullptr;
@@ -906,6 +891,7 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 		indexBufferDataSky.pSysMem = skyBoxIndices;
 		indexBufferDataSky.SysMemPitch = 0;
 		indexBufferDataSky.SysMemSlicePitch = 0;
+
 		CD3D11_BUFFER_DESC indexBufferDescSky(sizeof(skyBoxIndices), D3D11_BIND_INDEX_BUFFER);
 		DX::ThrowIfFailed(
 			m_deviceResources->GetD3DDevice()->CreateBuffer(

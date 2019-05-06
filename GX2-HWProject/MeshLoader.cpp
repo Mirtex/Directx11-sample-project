@@ -129,7 +129,9 @@ bool MeshLoader::LoadMeshFromFile(char *path)
 
 	int test = 0;
 
+	return false;
 }
+
 unsigned int MeshLoader::GetNumVerts()
 {
 	return fullVertex.size();
