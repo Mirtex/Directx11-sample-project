@@ -341,7 +341,6 @@ Sample3DSceneRenderer::Sample3DSceneRenderer(const std::shared_ptr<DX::DeviceRes
 	m_degreesPerSecond(45),
 	m_indexCountHold(0),
 	m_indexCountCube(0),
-	m_tracking(false),
 	m_deviceResources(deviceResources)
 {
 	CreateDeviceDependentResources();
@@ -417,31 +416,27 @@ extern char buttons[256];
 // Called once per frame, rotates the cube and calculates the model and view matrices.
 void Sample3DSceneRenderer::Update(DX::StepTimer const& timer)
 {
-	if (!m_tracking)
-	{
 		// Convert degrees to radians, then convert seconds to rotation angle
-		float radiansPerSecond = XMConvertToRadians(m_degreesPerSecond);
-		double totalRotation = timer.GetTotalSeconds() * radiansPerSecond;
-		float radians = static_cast<float>(fmod(totalRotation, XM_2PI));
-		
-		
-		if (secondsPassed < 4.0f && !flipped)
-		{
-			secondsPassed += static_cast<float>(timer.GetElapsedSeconds());
-		}
-		else if (secondsPassed > 0 && flipped)
-		{
-			secondsPassed -= static_cast<float>(timer.GetElapsedSeconds());
-		}
-
-		if(secondsPassed >= 4.0f && !flipped || secondsPassed <= 0 && flipped)
-		{
-			flipped = !flipped;
-		}
-
-		Rotate(radians);
-		
+	float radiansPerSecond = XMConvertToRadians(m_degreesPerSecond);
+	double totalRotation = timer.GetTotalSeconds() * radiansPerSecond;
+	float radians = static_cast<float>(fmod(totalRotation, XM_2PI));
+	
+	
+	if (secondsPassed < 4.0f && !flipped)
+	{
+		secondsPassed += static_cast<float>(timer.GetElapsedSeconds());
 	}
+	else if (secondsPassed > 0 && flipped)
+	{
+		secondsPassed -= static_cast<float>(timer.GetElapsedSeconds());
+	}
+
+	if(secondsPassed >= 4.0f && !flipped || secondsPassed <= 0 && flipped)
+	{
+		flipped = !flipped;
+	}
+
+	Rotate(radians);
 
 	XMMATRIX newcamera = XMLoadFloat4x4(&camera);
 	//m_constantBufferDataSky.view = camera;
@@ -495,26 +490,6 @@ void Sample3DSceneRenderer::Rotate(float radians)
 	// Prepare to pass the updated model matrix to the shader
 	XMStoreFloat4x4(&m_constantBufferData.model[0], XMMatrixTranspose(XMMatrixScaling(0.8f,0.8f,0.8f)*XMMatrixRotationY(radians)*XMMatrixRotationZ(radians)));
 	m_constantBufferDataSky.storedRadians = m_constantBufferData.storedRadians = storedRadians = radians;
-}
-
-void Sample3DSceneRenderer::StartTracking()
-{
-	m_tracking = true;
-}
-
-// When tracking, the 3D cube can be rotated around its Y axis by tracking pointer position relative to the output screen width.
-void Sample3DSceneRenderer::TrackingUpdate(float positionX)
-{
-	if (m_tracking)
-	{
-		float radians = XM_2PI * 2.0f * positionX / m_deviceResources->GetOutputSize().Width;
-		Rotate(radians);
-	}
-}
-
-void Sample3DSceneRenderer::StopTracking()
-{
-	m_tracking = false;
 }
 
 // Renders one frame using the vertex and pixel shaders.
