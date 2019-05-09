@@ -1,12 +1,13 @@
 This project was created during my learning experience at Full Sail.
 
-WARNING: This project is in the process of being cleaned up and organized, it's initial state 
-is messy due to time constraints during its creation.
+WARNING: This code is currently being polished; warnings and messy code are probably currently part of 
+it but I'll continue to correct these and optimize it every chance I get.
  
 The non-graphics code for this project was provided by the university as a
-base to work on. I have no experience with UWP implementations (at this point in time 4/28/2019).
-That being said, I do have experience implementing direct C++ windows implementations of 
-DirectX11 graphics, the reason we used this base code provided was due to time contraints.
+base to work on; this code had a basic cube implementetion (that I believe is actually a Microsoft sample.) 
+I have no experience with UWP implementations (at this point in time 4/28/2019).That being said, I do have 
+experience implementing direct C++ windows implementations of DirectX11 graphics, the reason we used this 
+base code provided was due to time contraints.
 
 The 3D model used for this software was provided by a friend who has decided to remain anonymous
 for the purposes of this project. Nevertheless, I have basics experience in 3D Modeling.
